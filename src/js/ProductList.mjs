@@ -1,24 +1,53 @@
+function productCardTemplate(product) {
+    const id = product.Id ?? product.id ?? "";
+    const brand = product.Brand?.Name ?? product.Brand ?? product.brand ?? "Brand";
+    const name = product.Name ?? product.name ?? "Product";
+    const price = product.FinalPrice ?? product.Price ?? product.price ?? 0;
+
+    const imgSrc =
+        product.Image ??
+        product.Images?.Primary ??
+        product.ImageSrc ??
+        product.image ??
+        "";
+
+    let image = imgSrc;
+
+    if (image && !image.startsWith("/") && !image.startsWith("http")) {
+        image = `/${image}`;
+    }
+
+    if (!image) {
+        image = "/images/banner-sm.jpg";
+    }
+
+    return `
+      <li class="product-card">
+        <a href="product_pages/?product=${id}">
+          <img src="${image}" alt="${name}" />
+          <h3 class="card__brand">${brand}</h3>
+          <h2 class="card__name">${name}</h2>
+          <p class="product-card__price">$${price}</p>
+        </a>
+      </li>
+    `;
+}
+
 export default class ProductList {
     constructor(category, dataSource, listElement) {
-      this.category = category;
-      this.dataSource = dataSource;
-      this.listElement = listElement;
-      this.list = [];
+        this.category = category;
+        this.dataSource = dataSource;
+        this.listElement = listElement;
+        this.list = [];
     }
-  
+
     async init() {
-      this.list = await this.dataSource.getData();
-      // por ahora solo confirmamos que llega la data
-      // el render completo viene en el siguiente step
-      this.renderList(this.list);
+        this.list = await this.dataSource.getData();
+        this.renderList(this.list);
     }
-  
+
     renderList(list) {
-      // temporal: muestra algo simple para comprobar que funciona
-      const html = list
-        .map((item) => `<li>${item.Name} - $${item.FinalPrice ?? item.Price}</li>`)
-        .join("");
-  
-      this.listElement.innerHTML = html;
+        const htmlStrings = list.map(productCardTemplate);
+        this.listElement.innerHTML = htmlStrings.join("");
     }
-  }
+}
