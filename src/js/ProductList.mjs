@@ -25,13 +25,7 @@ export default class ProductList {
     async init() {
         const list = await this.dataSource.getData();
 
-        const allowedIds = new Set([
-            "cedar-ridge-rimrock-2",
-            "marmot-ajax-3",
-            "northface-alpine-3",
-            "northface-talus-4",
-        ]);
-
+        const allowedIds = new Set(["880RR", "985RF", "985PR", "344YJ"]);
         const filteredList = list.filter((p) => allowedIds.has(p.Id));
 
         this.renderList(filteredList);
