@@ -1,3 +1,5 @@
+import { renderListWithTemplate } from "./utils.mjs";
+
 function productCardTemplate(product) {
     const id = product.Id ?? product.id ?? "";
     const brand = product.Brand?.Name ?? product.Brand ?? product.brand ?? "Brand";
@@ -12,25 +14,23 @@ function productCardTemplate(product) {
         "";
 
     let image = imgSrc;
-
     if (image && !image.startsWith("/") && !image.startsWith("http")) {
         image = `/${image}`;
     }
-
     if (!image) {
         image = "/images/banner-sm.jpg";
     }
 
     return `
-      <li class="product-card">
-        <a href="product_pages/?product=${id}">
-          <img src="${image}" alt="${name}" />
-          <h3 class="card__brand">${brand}</h3>
-          <h2 class="card__name">${name}</h2>
-          <p class="product-card__price">$${price}</p>
-        </a>
-      </li>
-    `;
+    <li class="product-card">
+      <a href="product_pages/?product=${id}">
+        <img src="${image}" alt="${name}" />
+        <h3 class="card__brand">${brand}</h3>
+        <h2 class="card__name">${name}</h2>
+        <p class="product-card__price">$${price}</p>
+      </a>
+    </li>
+  `;
 }
 
 export default class ProductList {
@@ -47,7 +47,12 @@ export default class ProductList {
     }
 
     renderList(list) {
-        const htmlStrings = list.map(productCardTemplate);
-        this.listElement.innerHTML = htmlStrings.join("");
+        renderListWithTemplate(
+            productCardTemplate,
+            this.listElement,
+            list,
+            "afterbegin",
+            true
+        );
     }
 }
