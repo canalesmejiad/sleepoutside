@@ -1,13 +1,18 @@
 import { renderListWithTemplate } from "./utils.mjs";
 
 function productCardTemplate(product) {
-  const image = product.Image?.startsWith("/") ? product.Image : `/${product.Image}`;
+  const imageRaw = product.Image || "";
+  const image = imageRaw.startsWith("http")
+    ? imageRaw
+    : imageRaw.startsWith("/")
+      ? imageRaw
+      : `/${imageRaw}`;
 
-  const finalPrice = Number(product.FinalPrice);
-  const msrp = Number(product.SuggestedRetailPrice);
+  const finalPrice = Number(product.FinalPrice) || 0;
+  const msrp = Number(product.SuggestedRetailPrice) || 0;
 
-  const hasDiscount = msrp && finalPrice < msrp;
-  const savings = hasDiscount ? (msrp - finalPrice).toFixed(2) : null;
+  const hasDiscount = msrp > 0 && finalPrice > 0 && finalPrice < msrp;
+  const savings = hasDiscount ? (msrp - finalPrice).toFixed(2) : "";
 
   const discountBadge = hasDiscount
     ? `<p class="discount-badge">SAVE $${savings}</p>`
@@ -22,13 +27,19 @@ function productCardTemplate(product) {
     `
     : `<p class="product-card__price">$${finalPrice.toFixed(2)}</p>`;
 
+  const brand =
+    product?.Brand?.Name ||
+    product?.Brand ||
+    product?.brand ||
+    "";
+
   return `
     <li class="product-card">
-      <a href="product_pages/?product=${product.Id}">
+      <a href="/product_pages/index.html?product=${product.Id}">
         ${discountBadge}
-        <img src="${image}" alt="${product.Name}">
-        <h3 class="card__brand">${product.Brand.Name}</h3>
-        <h2 class="card__name">${product.Name}</h2>
+        <img src="${image}" alt="${product.Name || "Product"}">
+        <h3 class="card__brand">${brand}</h3>
+        <h2 class="card__name">${product.Name || ""}</h2>
         ${priceHtml}
       </a>
     </li>
@@ -44,13 +55,16 @@ export default class ProductList {
 
   async init() {
     const list = await this.dataSource.getData(this.category);
-    const allowedIds = new Set(["880RR", "985RF", "985PR", "344YJ"]);
-    const filteredList = list.filter((p) => allowedIds.has(p.Id));
-
-    this.renderList(filteredList);
+    this.renderList(list);
   }
 
   renderList(list) {
-    renderListWithTemplate(productCardTemplate, this.listElement, list, "afterbegin", true);
+    renderListWithTemplate(
+      productCardTemplate,
+      this.listElement,
+      list,
+      "afterbegin",
+      true
+    );
   }
 }
