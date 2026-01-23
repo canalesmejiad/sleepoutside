@@ -9,17 +9,23 @@ function convertToJson(res) {
 export default class ProductData {
   constructor(category) {
     this.category = category;
-    this.path = `/json/${this.category}.json`;
+    this.baseUrl =
+      import.meta.env.VITE_SERVER_URL ||
+      "https://wdd330-backend.onrender.com/";
+    this.searchPath = "products/search/";
+    this.productPath = "product/";
   }
 
   getData() {
-    return fetch(this.path)
-      .then(convertToJson)
-      .then((data) => data);
+    const url = new URL(
+      `${this.searchPath}${this.category}`,
+      this.baseUrl
+    );
+    return fetch(url).then(convertToJson);
   }
 
   async findProductById(id) {
-    const products = await this.getData();
-    return products.find((item) => item.Id === id);
+    const url = new URL(`${this.productPath}${id}`, this.baseUrl);
+    return fetch(url).then(convertToJson);
   }
 }
