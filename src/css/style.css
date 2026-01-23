@@ -293,3 +293,46 @@ footer {
 .price--final {
   font-weight: 700;
 }
+.categories {
+  margin-top: 1rem;
+  padding: 1rem;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 1.25rem;
+  align-items: start;
+  justify-items: center;
+}
+
+.category-card {
+  width: 100%;
+  max-width: 200px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--dark-grey);
+  padding: 0.75rem 0.5rem;
+  border: 1px solid var(--light-grey);
+  border-radius: 8px;
+}
+
+.category-card img {
+  width: 64px;
+  height: 64px;
+  display: block;
+  margin: 0 auto 0.5rem;
+  object-fit: contain;
+}
+
+.category-card p {
+  padding: 0;
+  margin: 0;
+  font-weight: 600;
+}
+
+@media screen and (min-width: 700px) {
+  .category-grid {
+    grid-template-columns: repeat(4, minmax(120px, 1fr));
+  }
+}
