@@ -6,26 +6,22 @@ function convertToJson(res) {
   }
 }
 
-export default class ProductData {
-  constructor(category) {
-    this.category = category;
-    this.baseUrl =
-      import.meta.env.VITE_SERVER_URL ||
-      "https://wdd330-backend.onrender.com/";
-    this.searchPath = "products/search/";
-    this.productPath = "product/";
-  }
+const baseURL = import.meta.env.VITE_SERVER_URL;
 
-  getData() {
-    const url = new URL(
-      `${this.searchPath}${this.category}`,
-      this.baseUrl
+export default class ProductData {
+  async getData(category) {
+    const response = await fetch(
+      `${baseURL}products/search/${category}`
     );
-    return fetch(url).then(convertToJson);
+    const data = await convertToJson(response);
+    return data.Result;
   }
 
   async findProductById(id) {
-    const url = new URL(`${this.productPath}${id}`, this.baseUrl);
-    return fetch(url).then(convertToJson);
+    const response = await fetch(
+      `${baseURL}product/${id}`
+    );
+    const data = await convertToJson(response);
+    return data;
   }
 }
