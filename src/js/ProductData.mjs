@@ -1,8 +1,3 @@
-function convertToJson(res) {
-  if (res.ok) return res.json();
-  throw new Error(`Bad Response: ${res.status}`);
-}
-
 const baseURL = import.meta.env.VITE_SERVER_URL;
 
 export default class ProductData {
