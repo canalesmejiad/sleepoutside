@@ -40,10 +40,9 @@ export default class ProductDetails {
             ? `Color: ${colorName}`
             : "";
 
-        const desc =
-            p?.DescriptionHtmlSimple
-                ? p.DescriptionHtmlSimple.replace(/<[^>]*>/g, "")
-                : (p?.Description ?? "");
+        const desc = p?.DescriptionHtmlSimple
+            ? p.DescriptionHtmlSimple.replace(/<[^>]*>/g, "")
+            : p?.Description ?? "";
         document.querySelector(".product__description").textContent = desc;
 
         const imgEl = document.querySelector(".product-image");
@@ -52,8 +51,18 @@ export default class ProductDetails {
     }
 
     addProductToCart() {
+        if (!this.product?.Id) return;
+
         const cartItems = getLocalStorage("so-cart") || [];
-        cartItems.push(this.product);
+
+        const existingItem = cartItems.find((item) => item.Id === this.product.Id);
+
+        if (existingItem) {
+            existingItem.qty = (existingItem.qty || 1) + 1;
+        } else {
+            cartItems.push({ ...this.product, qty: 1 });
+        }
+
         setLocalStorage("so-cart", cartItems);
     }
 }
