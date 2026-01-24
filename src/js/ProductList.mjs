@@ -1,12 +1,12 @@
 import { renderListWithTemplate } from "./utils.mjs";
 
-const baseURL = import.meta.env.VITE_SERVER_URL;
-
 function getImageUrl(image) {
-  if (!image) return "";
+  if (!image) return "/images/marmot-160x100.jpg";
   if (image.startsWith("http")) return image;
-  if (image.startsWith("/")) return `${baseURL}${image.slice(1)}`;
-  return `${baseURL}${image}`;
+  if (image.startsWith("/images/")) return image;
+  if (image.startsWith("images/")) return `/${image}`;
+  if (image.startsWith("/")) return image;
+  return `/images/${image}`;
 }
 
 function productCardTemplate(product) {
@@ -36,7 +36,7 @@ function productCardTemplate(product) {
       <a href="/product_pages/index.html?product=${product.Id}">
         ${discountBadge}
         <img src="${image}" alt="${product.Name}">
-        <h3 class="card__brand">${product.Brand?.Name ?? ""}</h3>
+        <h3 class="card__brand">${product.Brand.Name}</h3>
         <h2 class="card__name">${product.Name}</h2>
         ${priceHtml}
       </a>
@@ -53,16 +53,14 @@ export default class ProductList {
 
   async init() {
     const list = await this.dataSource.getData(this.category);
-    this.renderList(list);
+
+    const allowedIds = new Set(["880RR", "985RF", "985PR", "344YJ"]);
+    const filteredList = list.filter((p) => allowedIds.has(p.Id));
+
+    this.renderList(filteredList);
   }
 
   renderList(list) {
-    renderListWithTemplate(
-      productCardTemplate,
-      this.listElement,
-      list,
-      "afterbegin",
-      true
-    );
+    renderListWithTemplate(productCardTemplate, this.listElement, list, "afterbegin", true);
   }
 }

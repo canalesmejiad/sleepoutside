@@ -13,28 +13,39 @@ export default class ProductDetails {
             .addEventListener("click", this.addToCart.bind(this));
     }
 
-    normalizeImagePath(image) {
-        if (!image) return "";
+    getImageUrl(image) {
+        if (!image) return "/images/marmot-160x100.jpg";
         if (image.startsWith("http")) return image;
+        if (image.startsWith("/images/")) return image;
+        if (image.startsWith("images/")) return `/${image}`;
         if (image.startsWith("/")) return image;
-        return `/${image}`;
+        return `/images/${image}`;
     }
 
     renderProductDetails() {
-        const image = this.normalizeImagePath(this.product.Image);
+        const image = this.getImageUrl(this.product?.Image);
 
-        document.querySelector(".product-brand").textContent = this.product.Brand?.Name ?? "";
-        document.querySelector(".product-name").textContent = this.product.Name ?? "";
-        document.querySelector(".product-card__price").textContent = `$${Number(this.product.FinalPrice).toFixed(2)}`;
+        document.querySelector(".product-brand").textContent =
+            this.product?.Brand?.Name ?? "";
 
-        const colorName = this.product.Colors?.[0]?.ColorName ?? "";
-        document.querySelector(".product__color").textContent = colorName ? `Color: ${colorName}` : "";
+        document.querySelector(".product-name").textContent =
+            this.product?.Name ?? "";
 
-        document.querySelector(".product__description").textContent = this.product.Description ?? "";
+        document.querySelector(".product-card__price").textContent = `$${Number(
+            this.product?.FinalPrice ?? 0
+        ).toFixed(2)}`;
+
+        const colorName = this.product?.Colors?.[0]?.ColorName ?? "";
+        document.querySelector(".product__color").textContent = colorName
+            ? `Color: ${colorName}`
+            : "";
+
+        document.querySelector(".product__description").textContent =
+            this.product?.Description ?? "";
 
         const imgEl = document.querySelector(".product-image");
         imgEl.src = image;
-        imgEl.alt = this.product.Name ?? "Product image";
+        imgEl.alt = this.product?.Name ?? "Product image";
     }
 
     addToCart() {
