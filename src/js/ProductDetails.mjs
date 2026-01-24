@@ -1,55 +1,47 @@
+import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+
 export default class ProductDetails {
-    constructor(productId, dataSource) {
-        this.productId = productId;
-        this.product = null;
-        this.dataSource = dataSource;
-    }
 
-    async init() {
-        this.product = await this.dataSource.findProductById(this.productId);
-        this.renderProductDetails();
-        document
-            .getElementById("addToCart")
-            .addEventListener("click", this.addToCart.bind(this));
-    }
+  constructor(productId, dataSource) {
+    this.productId = productId;
+    this.product = {};
+    this.dataSource = dataSource;
+  }
 
-    getImageUrl(image) {
-        if (!image) return "/images/marmot-160x100.jpg";
-        if (image.startsWith("http")) return image;
-        if (image.startsWith("/images/")) return image;
-        if (image.startsWith("images/")) return `/${image}`;
-        if (image.startsWith("/")) return image;
-        return `/images/${image}`;
-    }
+  async init() {
+    this.product = await this.dataSource.findProductById(this.productId);
+    this.renderProductDetails();
+    document
+      .getElementById("add-to-cart")
+      .addEventListener("click", this.addProductToCart.bind(this));
+  }
 
-    renderProductDetails() {
-        const image = this.getImageUrl(this.product?.Image);
+  addProductToCart() {
+    const cartItems = getLocalStorage("so-cart") || [];
+    cartItems.push(this.product);
+    setLocalStorage("so-cart", cartItems);
+  }
 
-        document.querySelector(".product-brand").textContent =
-            this.product?.Brand?.Name ?? "";
+  renderProductDetails() {
+    productDetailsTemplate(this.product);
+  }
+}
 
-        document.querySelector(".product-name").textContent =
-            this.product?.Name ?? "";
+function productDetailsTemplate(product) {
+  document.querySelector("h2").textContent = product.Category.charAt(0).toUpperCase() + product.Category.slice(1);
+  document.querySelector("#p-brand").textContent = product.Brand.Name;
+  document.querySelector("#p-name").textContent = product.NameWithoutBrand;
 
-        document.querySelector(".product-card__price").textContent = `$${Number(
-            this.product?.FinalPrice ?? 0
-        ).toFixed(2)}`;
+  const productImage = document.querySelector("#p-image");
+  productImage.src = product.Images.PrimaryExtraLarge;
+  productImage.alt = product.NameWithoutBrand;
+  const euroPrice = new Intl.NumberFormat('de-DE',
+    {
+      style: 'currency', currency: 'EUR',
+    }).format(Number(product.FinalPrice) * 0.85);
+  document.querySelector("#p-price").textContent = `${euroPrice}`;
+  document.querySelector("#p-color").textContent = product.Colors[0].ColorName;
+  document.querySelector("#p-description").innerHTML = product.DescriptionHtmlSimple;
 
-        const colorName = this.product?.Colors?.[0]?.ColorName ?? "";
-        document.querySelector(".product__color").textContent = colorName
-            ? `Color: ${colorName}`
-            : "";
-
-        document.querySelector(".product__description").textContent =
-            this.product?.Description ?? "";
-
-        const imgEl = document.querySelector(".product-image");
-        imgEl.src = image;
-        imgEl.alt = this.product?.Name ?? "Product image";
-    }
-
-    addToCart() {
-        const event = new CustomEvent("addToCart", { detail: this.product });
-        window.dispatchEvent(event);
-    }
+  document.querySelector("#add-to-cart").dataset.id = product.Id;
 }

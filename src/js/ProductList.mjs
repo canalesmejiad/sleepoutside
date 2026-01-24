@@ -1,47 +1,16 @@
 import { renderListWithTemplate } from "./utils.mjs";
 
-function getImageUrl(image) {
-  if (!image) return "/images/marmot-160x100.jpg";
-  if (image.startsWith("http")) return image;
-  if (image.startsWith("/images/")) return image;
-  if (image.startsWith("images/")) return `/${image}`;
-  if (image.startsWith("/")) return image;
-  return `/images/${image}`;
-}
-
 function productCardTemplate(product) {
-  const image = getImageUrl(product.Image);
-
-  const finalPrice = Number(product.FinalPrice);
-  const msrp = Number(product.SuggestedRetailPrice);
-
-  const hasDiscount = msrp && finalPrice < msrp;
-  const savings = hasDiscount ? (msrp - finalPrice).toFixed(2) : null;
-
-  const discountBadge = hasDiscount
-    ? `<p class="discount-badge">SAVE $${savings}</p>`
-    : "";
-
-  const priceHtml = hasDiscount
-    ? `
-      <p class="product-card__price">
-        <span class="price--original">$${msrp.toFixed(2)}</span>
-        <span class="price--final">$${finalPrice.toFixed(2)}</span>
-      </p>
-    `
-    : `<p class="product-card__price">$${finalPrice.toFixed(2)}</p>`;
-
   return `
     <li class="product-card">
-      <a href="/product_pages/index.html?product=${product.Id}">
-        ${discountBadge}
-        <img src="${image}" alt="${product.Name}">
-        <h3 class="card__brand">${product.Brand.Name}</h3>
-        <h2 class="card__name">${product.Name}</h2>
-        ${priceHtml}
+      <a href="/product_pages/?product=${product.Id}">
+        <img src="${product.Images.PrimaryMedium}" alt="${product.Name}">
+        <h3>${product.Brand.Name}</h3>
+        <p>${product.NameWithoutBrand}</p>
+        <p class="product-card__price">$${product.FinalPrice}</p>
       </a>
     </li>
-  `;
+    `;
 }
 
 export default class ProductList {
@@ -53,14 +22,14 @@ export default class ProductList {
 
   async init() {
     const list = await this.dataSource.getData(this.category);
-
-    const allowedIds = new Set(["880RR", "985RF", "985PR", "344YJ"]);
-    const filteredList = list.filter((p) => allowedIds.has(p.Id));
-
-    this.renderList(filteredList);
+    this.renderList(list);
+    document.querySelector(".title").textContent = this.category;
   }
 
   renderList(list) {
-    renderListWithTemplate(productCardTemplate, this.listElement, list, "afterbegin", true);
+    
+    renderListWithTemplate(productCardTemplate, this.listElement, list);
+
   }
+
 }
