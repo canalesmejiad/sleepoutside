@@ -1,15 +1,16 @@
 import { renderListWithTemplate } from "./utils.mjs";
 
-function getImageUrl(product) {
-  const img = product.Image || product.Images?.PrimaryMedium || product.Images?.PrimarySmall || "";
-  if (!img) return "/images/logos/category-tents.svg";
-  if (img.startsWith("http")) return img;
-  if (img.startsWith("/")) return img;
-  return `/${img}`;
+const baseURL = import.meta.env.VITE_SERVER_URL;
+
+function getImageUrl(image) {
+  if (!image) return "";
+  if (image.startsWith("http")) return image;
+  if (image.startsWith("/")) return `${baseURL}${image.slice(1)}`;
+  return `${baseURL}${image}`;
 }
 
 function productCardTemplate(product) {
-  const image = getImageUrl(product);
+  const image = getImageUrl(product.Image);
 
   const finalPrice = Number(product.FinalPrice);
   const msrp = Number(product.SuggestedRetailPrice);
@@ -56,6 +57,12 @@ export default class ProductList {
   }
 
   renderList(list) {
-    renderListWithTemplate(productCardTemplate, this.listElement, list, "afterbegin", true);
+    renderListWithTemplate(
+      productCardTemplate,
+      this.listElement,
+      list,
+      "afterbegin",
+      true
+    );
   }
 }
