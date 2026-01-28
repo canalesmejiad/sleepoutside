@@ -54,7 +54,6 @@ export default class ProductDetails {
         if (!this.product?.Id) return;
 
         const cartItems = getLocalStorage("so-cart") || [];
-
         const existingItem = cartItems.find((item) => item.Id === this.product.Id);
 
         if (existingItem) {
