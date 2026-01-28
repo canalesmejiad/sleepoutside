@@ -293,6 +293,7 @@ footer {
 .price--final {
   font-weight: 700;
 }
+
 .categories {
   margin-top: 1rem;
   padding: 1rem;
@@ -334,5 +335,64 @@ footer {
 @media screen and (min-width: 700px) {
   .category-grid {
     grid-template-columns: repeat(4, minmax(120px, 1fr));
+  }
+}
+
+/* Checkout button on cart page */
+.checkout-button {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.75rem;
+}
+
+.btn-checkout {
+  display: inline-block;
+  padding: 0.6em 2em;
+  background-color: var(--secondary-color);
+  color: white;
+  font-size: var(--large-font);
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 4px;
+  border: 0;
+  cursor: pointer;
+}
+
+.btn-checkout:hover {
+  opacity: 0.9;
+}
+
+/* Cart subtotal + checkout row */
+.cart-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+}
+
+.cart-summary p {
+  padding: 0;
+  margin: 0;
+}
+
+.checkout-button {
+  padding: 0;
+}
+
+/* Mobile: stack nicely */
+@media screen and (max-width: 500px) {
+  .cart-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .checkout-button {
+    width: 100%;
+  }
+
+  .btn-checkout {
+    width: 100%;
+    text-align: center;
   }
 }
