@@ -5,7 +5,6 @@ import ProductList from "./ProductList.mjs";
 loadHeaderFooter();
 
 const category = getParam("category") || "tents";
-
 const dataSource = new ExternalServices();
 const listElement = document.querySelector(".product-list");
 
