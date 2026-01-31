@@ -396,3 +396,23 @@ footer {
     text-align: center;
   }
 }
+
+.alert {
+  background-color: #f4a261;
+  color: #000;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.alert-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-alert {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
