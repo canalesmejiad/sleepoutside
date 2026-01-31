@@ -1,5 +1,12 @@
 async function convertToJson(res) {
-  const jsonResponse = await res.json();
+  let jsonResponse;
+
+  try {
+    jsonResponse = await res.json();
+  } catch (e) {
+    const text = await res.text().catch(() => "");
+    jsonResponse = { message: text || "Unknown error" };
+  }
 
   if (res.ok) return jsonResponse;
 

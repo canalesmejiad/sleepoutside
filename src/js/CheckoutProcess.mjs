@@ -43,4 +43,20 @@ export default class CheckoutProcess {
       <p><strong>Order Total: $${this.total.toFixed(2)}</strong></p>
     `;
   }
+
+  async checkout(payload) {
+    try {
+      const result = await this.externalServices.checkout(payload);
+      return result;
+    } catch (err) {
+      if (err?.name === "servicesError") {
+        throw err;
+      }
+
+      throw {
+        name: "servicesError",
+        message: { message: "Network error. Please try again." },
+      };
+    }
+  }
 }
