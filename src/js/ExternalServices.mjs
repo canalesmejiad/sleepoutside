@@ -1,6 +1,12 @@
-function convertToJson(res) {
-  if (res.ok) return res.json();
-  throw new Error(`Bad Response: ${res.status}`);
+async function convertToJson(res) {
+  const jsonResponse = await res.json();
+
+  if (res.ok) return jsonResponse;
+
+  throw {
+    name: "servicesError",
+    message: jsonResponse,
+  };
 }
 
 const baseURL = import.meta.env.VITE_SERVER_URL;
@@ -31,6 +37,7 @@ export default class ExternalServices {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     });
+
     return await convertToJson(response);
   }
 }
