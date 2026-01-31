@@ -51,8 +51,8 @@ form?.addEventListener("submit", async (e) => {
 
     try {
         await checkout.checkout(payload);
-        showMessage("✅ Order placed successfully!", "success");
-        form.reset();
+        localStorage.removeItem("so-cart");
+        window.location.href = "/checkout/success.html";
     } catch (err) {
         let msg = "❌ Checkout failed. Please try again.";
 
