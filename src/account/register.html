@@ -1,82 +1,85 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sleep Outside | Register</title>
     <link rel="stylesheet" href="/css/style.css" />
     <script type="module" src="/js/register.js"></script>
-  </head>
+</head>
 
-  <body>
+<body>
     <header class="divider" id="main-header"></header>
 
     <main class="divider">
-      <section class="products">
-        <h2>Create Account</h2>
+        <section class="products">
+            <h2>Create Account</h2>
 
-        <form id="register-form">
-          <fieldset>
-            <legend>Customer</legend>
-            <label>
-              First Name
-              <input name="firstName" type="text" required />
-            </label>
-            <label>
-              Last Name
-              <input name="lastName" type="text" required />
-            </label>
-            <label>
-              Email
-              <input name="email" type="email" required />
-            </label>
-          </fieldset>
+            <form id="register-form">
+                <fieldset>
+                    <legend>Customer</legend>
+                    <label>
+                        First Name
+                        <input name="firstName" type="text" required />
+                    </label>
+                    <label>
+                        Last Name
+                        <input name="lastName" type="text" required />
+                    </label>
+                    <label>
+                        Email
+                        <input name="email" type="email" required />
+                    </label>
+                </fieldset>
 
-          <fieldset>
-            <legend>Address</legend>
-            <label>
-              Street Address
-              <input name="street" type="text" required />
-            </label>
-            <label>
-              City
-              <input name="city" type="text" required />
-            </label>
-            <label>
-              State
-              <input name="state" type="text" required />
-            </label>
-            <label>
-              Zip Code
-              <input name="zip" type="text" required pattern="^\\d{5}(-\\d{4})?$" />
-            </label>
-          </fieldset>
+                <fieldset>
+                    <legend>Address</legend>
+                    <label>
+                        Street Address
+                        <input name="street" type="text" required />
+                    </label>
+                    <label>
+                        City
+                        <input name="city" type="text" required />
+                    </label>
+                    <label>
+                        State
+                        <input name="state" type="text" required />
+                    </label>
+                    <label>
+                        Zip Code
+                        <input name="zip" type="text" required pattern="\d{5}(-\d{4})?"
+                            placeholder="12345 or 12345-6789" />
+                    </label>
+                </fieldset>
 
-          <fieldset>
-            <legend>Login</legend>
-            <label>
-              Password
-              <input name="password" type="password" required minlength="6" />
-            </label>
-            <label>
-              Confirm Password
-              <input name="confirmPassword" type="password" required minlength="6" />
-            </label>
-          </fieldset>
+                <fieldset>
+                    <legend>Login</legend>
+                    <label>
+                        Password
+                        <input name="password" type="password" required minlength="6" />
+                    </label>
+                    <label>
+                        Confirm Password
+                        <input name="confirmPassword" type="password" required minlength="6" />
+                    </label>
+                </fieldset>
 
-          <fieldset>
-            <legend>Avatar</legend>
-            <label>
-              Avatar URL
-              <input name="avatarUrl" type="url" placeholder="https://..." />
-            </label>
-          </fieldset>
+                <fieldset>
+                    <legend>Avatar</legend>
+                    <label>
+                        Avatar URL
+                        <input name="avatarUrl" type="url" placeholder="https://..." />
+                    </label>
+                </fieldset>
 
-          <button type="submit">Create Account</button>
-        </form>
-      </section>
+                <button type="submit">Create Account</button>
+            </form>
+        </section>
     </main>
 
     <footer id="main-footer"></footer>
-  </body>
+</body>
+
 </html>
